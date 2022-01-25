@@ -9,8 +9,8 @@ echo $pid
 echo > logs/ens5.txt
 echo > logs/nvme0n1.txt
 echo > logs/pidstat.txt
-
 elapsed=0
+
 while kill -0 $pid 2> /dev/null; do
     echo "Elapsed $elapsed s."
     elapsed=$(($elapsed + 1))
@@ -19,3 +19,7 @@ while kill -0 $pid 2> /dev/null; do
     vmstat  -w -S M   >>  logs/vmstat_$TAG.txt
     sar -n DEV  1 1 | awk 'NR==5 {print}' >> logs/ens5_$TAG.txt
 done
+
+#-⋯⋯⋅⋱⋰⋆⋅⋅⋄⋅⋅∶⋅⋅⋄▫▪▭┈┅✕⋅⋅⋄⋅⋅✕∶⋅⋅⋄⋱⋰⋯⋯⋯⋯⋅⋱⋰⋆⋅⋅⋄⋅⋅∶⋅⋅⋄▫▪▭┈[ Network ]┅✕⋅⋅⋄⋅⋅✕∶⋅⋅⋄⋱⋰⋯⋯⋯⋅⋱⋰⋆⋅⋅⋄⋅⋅∶⋅⋅⋄▫▪▭┈┅✕⋅⋅⋄⋅⋅✕∶⋅⋅⋄⋱⋰⋯⋯⋯
+sudo iftop -t  -s 1 | awk 'NR==10||NR==11||NR==12{print}'
+# 
