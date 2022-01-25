@@ -59,5 +59,4 @@ const bombay_endpoints = [
   '/wasm/contracts/terra1seddp6u43xys0q85lpce9j6xwje7x7zqsf3fud/store?query_msg={"pool":{}}', 
   // stLuna
   '/wasm/contracts/terra1e42d7l5z5u53n7g990ry24tltdphs9vugap8cd/store?query_msg={"pool":{}}', 
-
 ]
