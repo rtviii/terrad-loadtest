@@ -65,7 +65,7 @@ print("5s len: ", len(p5s))
 print("95s len: ", len(p95s))
 
 plt.plot(timestamps, means, 'b-', label="wait_mean")
-# plt.fill_between(timestamps, p5s, p95s, 'b', label="mean")
+plt.fill_between(timestamps, p5s, p95s, 'b', label="quantiles")
 plt.show()
 # print("Mean", np.mean(report[1643102018]['wait']))
 # print("Q95: ",np.percentile(report[1643102028]['wait'], 95))

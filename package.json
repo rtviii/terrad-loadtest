@@ -1,0 +1,23 @@
+{
+  "name": "terrad-loadtest",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "main": "scratch.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rtviii/terrad-loadtest.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rtviii/terrad-loadtest/issues"
+  },
+  "homepage": "https://github.com/rtviii/terrad-loadtest#readme",
+  "devDependencies": {
+    "axios": "^0.25.0"
+  }
+}
