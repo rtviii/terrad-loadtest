@@ -64,6 +64,8 @@ lat.fill_between(timestamps, w_u-w_std, w_u+w_std, color='b', alpha=0.2)
 lat.plot(timestamps, [THRESHOLD_LATENCY_MS]*len(timestamps),'-', color='red', label=f"{THRESHOLD_LATENCY_MS/1000}s Threshold")
 lat.set_ylabel('Http Request Waittime (ms)')
 
+_twinx_n_reqs = lat.twinx()
+_twinx_n_reqs.plot(timestamps,n_reqs, color='blue', alpha=0.6 )
 
 
 traffic_in = axarr[1]
