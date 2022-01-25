@@ -1,6 +1,7 @@
 from itertools import tee
 import os
 import json
+import sys
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
@@ -9,8 +10,8 @@ import seaborn as sns
 sns.set_theme(style="darkgrid")
 
 
-
-df = pd.read_csv('waiting_received.csv',delimiter=' ',lineterminator="\n", header=None)
+logspath = sys.argv[1]
+df       = pd.read_csv(logspath,delimiter=' ',lineterminator="\n", header=None)
 
 report={
     
@@ -38,16 +39,16 @@ for index, row in df.iterrows():
 # 1643102025, 1643102026, 1643102027, 1643102028]
 
 for t in report.items():
+
+    waittimes = t[1]['wait']
+    traffic   = t[1]['inbound']
+    std  = np.std(waittimes)
     mean = np.mean(t[1]['wait'])
-    p5   = np.percentile(t[1]['wait'], 5)
-    p95  = np.percentile(t[1]['wait'], 95)
-    
-    report[t[0]]['p95']  = p95
-    report[t[0]]['p5']   = p5
     report[t[0]]['mean'] = mean
+    report[t[0]]['std']  = std
 
 
-    print(t[0], mean, p5, p95)
+    # print(t[0], mean, p5, p95)
 
 
 # for t in report.keys():
@@ -55,18 +56,29 @@ for t in report.items():
 #     report[timestamp] = report.pop(t)
 
 timestamps = [*report.keys()]
-means      = np.array([* map(lambda x: x['mean'], report.values()) ])
-p5s        = np.array([* map(lambda x: x['p5'], report.values()) ])
-p95s       = np.array([* map(lambda x: x['p95'], report.values()) ])
+w_means      = np.array([* map(lambda x: x['mean'], report.values()) ])
+w_stds       = np.array([* map(lambda x: x['std'], report.values()) ])
 
-print("tst len: ", len(timestamps))
-print("measn len: ", len(means))
-print("5s len: ", len(p5s))
-print("95s len: ", len(p95s))
+print(p5s)
+print(p95s)
+# print("tst len: ", len(timestamps))
+# print("measn len: ", len(means))
+# print("5s len: ", len(p5s))
+# print("95s len: ", len(p95s))
 
+
+
+plt.plot(timestamps, [2000]*len(timestamps), '-', color='red', label="2s Threshold")
 plt.plot(timestamps, means, 'b-', label="wait_mean")
-# plt.fill_between(timestamps, p5s, p95s, 'b', label="mean")
+plt.fill_between(timestamps, means-stds, means+stds, color='b', alpha=0.1)
+
+plt.xlabel("Time elapsed (s)")
+plt.ylabel("Request waittime (ms) ")
+
+
 plt.show()
-# print("Mean", np.mean(report[1643102018]['wait']))
-# print("Q95: ",np.percentile(report[1643102028]['wait'], 95))
+
+
+print("Mean", np.mean(report[1643102018]['wait']))
+print("Q95: ",np.percentile(report[1643102028]['wait'], 95))
 
