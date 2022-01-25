@@ -1,0 +1,5 @@
+
+**/node_modules/**
+*_venv/
+node_modules
+k6_venv

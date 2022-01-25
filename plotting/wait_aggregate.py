@@ -13,6 +13,7 @@ sns.set_theme(style="darkgrid")
 logspath = sys.argv[1]
 df = pd.read_csv(logspath, delimiter=' ', lineterminator="\n", header=None)
 report = {}
+
 for index, row in df.iterrows():
     [field, timestamp, value] = row
     if timestamp not in report:
@@ -37,7 +38,7 @@ for t in report.items():
     n_reqs = len(t[1]['wait'])
     w_std  = np.std(waittimes)
     w_u    = np.mean(t[1]['wait'])
-    
+
 
     report[t[0]]['w_u']     = w_u
     report[t[0]]['w_std']   = w_std

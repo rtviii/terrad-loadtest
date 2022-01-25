@@ -1,25 +1,53 @@
 import http from 'k6/http';
 import { Trend, Rate, Counter, Gauge } from 'k6/metrics';
+
 //@ts-check
 export const fail_counter = new Counter('FailedRequests')
 
 //-⋯⋯⋅⋱⋰⋆⋅⋅⋄⋅⋅∶⋅⋅⋄▫▪▭┈┅✕⋅⋅⋄⋅⋅✕∶⋅⋅⋄⋱⋰⋯⋯⋯⋯⋅⋱⋰⋆⋅⋅⋄⋅⋅∶⋅⋅⋄▫▪▭┈┅✕⋅⋅⋄⋅⋅✕∶⋅⋅⋄⋱⋰⋯⋯⋯⋅⋱⋰⋆⋅⋅⋄⋅⋅∶⋅⋅⋄▫▪▭┈┅✕⋅⋅⋄⋅⋅✕∶⋅⋅⋄⋱⋰⋯⋯⋯
 
 export const options = {
-  vus       : 200,
-  duration  : "10s",
+  stages: [
+    { duration: '10s', target: 200 },
+    // { duration: '10s', target: 300 },
+    { duration: '10s', target: 400 },
+    // { duration: '10s', target: 500 },
+    // { duration: '10s', target: 600 },
+    { duration: '10s', target: 700 },
+  ],
+  thresholds: {
+    "http_req_duration": [
+      {
+        threshold     : 'p(95) < 100',
+        abortOnFail   : false,           
+        delayAbortEval: '2s',            
+      },
+    ],
+  },
 };
 
 export default function () {
-  http.get(encodeURI('http://127.0.0.1:1317/cosmos/base/tendermint/v1beta1/blocks/latest'))
+  http.get(
+      bombay_endpoints[Math.floor(Math.random()*5)]['ep'])
 }
 
-const columbus_endpoints = [
-  '/cosmos/base/tendermint/v1beta1/blocks/latest',         // 36k
-  '/cosmos/base/tendermint/v1beta1/validatorsets/latest'   // 28K
+const bombay_endpoints = [
+  {ep: 'http://127.0.0.1:1317/cosmos/base/tendermint/v1beta1/blocks/latest',},         
+  {ep: 'http://127.0.0.1:1317/cosmos/base/tendermint/v1beta1/validatorsets/latest'},
+  {ep: 'http://127.0.0.1:1317/blocks/latest'},
+  {ep: 'http://127.0.0.1:1317/wasm/contracts/terra1p4gg3p2ue6qy2qfuxtrmgv2ec3f4jmgqtazum8/store?query_msg={"prices":{}}',},// Anchor Price Oracle
+  {ep: 'http://127.0.0.1:1317/wasm/contracts/terra18j0wd0f62afcugw2rx5y8e6j5qjxd7d6qsc87r/store?query_msg={"config":{}}',},// Anchor Liquidation Queue
+  
+  // {ep: 'http://127.0.0.1:1317/wasm/contracts/terra19mkj9nec6e3y5754tlnuz4vem7lzh4n0lc2s3l/store', params: {query_msg: { "pool": {} }}},
+  // {ep: 'http://127.0.0.1:1317/wasm/contracts/terra1seddp6u43xys0q85lpce9j6xwje7x7zqsf3fud/store', params: {query_msg: { "pool": {} }}},// bEth & bLuna
+]
 
-  // '/blocks/latest', 
+// const columbus_endpoints = [
+//   '/cosmos/base/tendermint/v1beta1/blocks/latest',         // 36k
+//   '/cosmos/base/tendermint/v1beta1/validatorsets/latest'   // 28K
 
+//   '/blocks/latest', 
+// 
   // Anchor Price Oracle
   // '/wasm/contracts/terra1cgg6yef7qcdm070qftghfulaxmllgmvk77nc7t/store?query_msg={"prices":{}}',
 
@@ -41,6 +69,7 @@ const columbus_endpoints = [
 
   // Pylon Governance
   // '/wasm/contracts/terra1xu8utj38xuw6mjwck4n97enmavlv852zkcvhgp/store?query_msg={"polls":{}}',
+<<<<<<< HEAD
 ]
 
 const bombay_endpoints = [
@@ -60,3 +89,6 @@ const bombay_endpoints = [
   // stLuna
   '/wasm/contracts/terra1e42d7l5z5u53n7g990ry24tltdphs9vugap8cd/store?query_msg={"pool":{}}', 
 ]
+=======
+// ]
+>>>>>>> c59940ef89fd560d61c91d79b30719a1d88f25d2
