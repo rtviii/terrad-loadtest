@@ -56,11 +56,9 @@ for t in report.items():
 #     report[timestamp] = report.pop(t)
 
 timestamps = [*report.keys()]
-w_means      = np.array([* map(lambda x: x['mean'], report.values()) ])
-w_stds       = np.array([* map(lambda x: x['std'], report.values()) ])
+means      = np.array([* map(lambda x: x['mean'], report.values()) ])
+stds       = np.array([* map(lambda x: x['std'], report.values()) ])
 
-print(p5s)
-print(p95s)
 # print("tst len: ", len(timestamps))
 # print("measn len: ", len(means))
 # print("5s len: ", len(p5s))
