@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from datetime import datetime
 import seaborn as sns
+from sqlalchemy import true
 sns.set_theme(style="darkgrid")
 
 
@@ -62,17 +63,24 @@ lat = axarr[0]
 lat.plot(timestamps, w_u, 'b-', label="wait_mean")
 lat.set_title('Waiting time')
 lat.fill_between(timestamps, w_u-w_std, w_u+w_std, color='b', alpha=0.2)
-lat.plot(timestamps, [THRESHOLD_LATENCY_MS]*len(timestamps),'-', color='red', label=f"{THRESHOLD_LATENCY_MS/1000}s Threshold")
+lat.plot(timestamps, [THRESHOLD_LATENCY_MS]*len(timestamps),'b-',  label=f"{THRESHOLD_LATENCY_MS/1000}s Threshold")
 lat.set_ylabel('Http Request Waittime (ms)')
+lat.set_axisbelow(True)
 
 _twinx_n_reqs = lat.twinx()
 _twinx_n_reqs.plot(timestamps,n_reqs, color='blue', alpha=0.6 )
+_twinx_n_reqs.set_ylabel("Requests/second", color="blue", size=14)
+_twinx_n_reqs.set_axisbelow(True)
+_twinx_n_reqs.grid(color='gray', linestyle='dashed')
+_twinx_n_reqs.tick_params(axis='y', colors='blue')
 
 
 traffic_in = axarr[1]
 traffic_in.plot(timestamps, traffic/1024, color='black', alpha=0.2)
 traffic_in.set_title('Inbound Traffic')
 traffic_in.set_ylabel("kB")
+traffic_in.set_xlabel("Time (s)")
 
+plt.legend()
 plt.show()
 
