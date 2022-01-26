@@ -3,3 +3,5 @@
 *_venv/
 node_modules
 k6_venv
+
+k6_stages.csv
