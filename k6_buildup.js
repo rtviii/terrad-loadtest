@@ -7,14 +7,14 @@ export const fail_counter = new Counter('FailedRequests')
 //-⋯⋯⋅⋱⋰⋆⋅⋅⋄⋅⋅∶⋅⋅⋄▫▪▭┈┅✕⋅⋅⋄⋅⋅✕∶⋅⋅⋄⋱⋰⋯⋯⋯⋯⋅⋱⋰⋆⋅⋅⋄⋅⋅∶⋅⋅⋄▫▪▭┈┅✕⋅⋅⋄⋅⋅✕∶⋅⋅⋄⋱⋰⋯⋯⋯⋅⋱⋰⋆⋅⋅⋄⋅⋅∶⋅⋅⋄▫▪▭┈┅✕⋅⋅⋄⋅⋅✕∶⋅⋅⋄⋱⋰⋯⋯⋯
 export const options = {
   stages: [
-    { duration: '30s', target: 200 },
-    { duration: '30s', target: 400 },
-    { duration: '30s', target: 600 },
-    { duration: '30s', target: 700 },
-    { duration: '1m', target: 800 },
-    { duration: '5s', target: 600 },
-    { duration: '5s', target: 500 },
-    { duration: '5s', target: 400 },
+    // { duration: '30s', target: 200 },
+    // { duration: '30s', target: 400 },
+    // { duration: '30s', target: 600 },
+    // { duration: '30s', target: 700 },
+    // { duration: '1m', target: 800 },
+    // { duration: '5s', target: 600 },
+    // { duration: '5s', target: 500 },
+    // { duration: '5s', target: 400 },
     { duration: '5s', target: 300 },
   ],
   thresholds: {
