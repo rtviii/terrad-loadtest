@@ -47,22 +47,12 @@ for t in report.items():
 
 
 timestamps = [*report.keys()]
-<<<<<<< HEAD
-means      = np.array([* map(lambda x: x['mean'], report.values()) ])
-stds       = np.array([* map(lambda x: x['std'], report.values()) ])
-
-# print("tst len: ", len(timestamps))
-# print("measn len: ", len(means))
-# print("5s len: ", len(p5s))
-# print("95s len: ", len(p95s))
-=======
 w_u        = np.array([* map(lambda x: x['w_u'], report.values())])
 w_std      = np.array([* map(lambda x: x['w_std'], report.values())])
 n_reqs     = np.array([* map(lambda x: x['n_reqs'], report.values())])
 traffic    = np.array([* map(lambda x: x['traffic'], report.values())])
 
 THRESHOLD_LATENCY_MS = 2000
->>>>>>> 9fd65a0fe04e47513bafcfe4c95bcab87ef52539
 
 # -⋯⋯⋅⋱⋰⋆⋅⋅⋄⋅⋅∶⋅⋅⋄▫▪▭┈┅✕⋅⋅⋄⋅⋅✕∶⋅⋅⋄⋱⋰⋯⋯⋯⋯⋅⋱⋰⋆⋅⋅⋄⋅⋅[Plots]∶⋅⋅⋄▫▪▭┈┅✕⋅⋅⋄⋅⋅✕∶⋅⋅⋄⋱⋰⋯⋯⋯⋅⋱⋰⋆⋅⋅⋄⋅⋅∶⋅⋅⋄▫▪▭┈┅✕⋅⋅⋄⋅⋅✕∶⋅⋅⋄⋱⋰⋯⋯
 

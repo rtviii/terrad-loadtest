@@ -20,7 +20,7 @@ export const fail_counter = new Counter('FailedRequests')
 // };
 
 export default function () {
- http.get('http://127.0.0.1:1317/cosmos/base/tendermint/v1beta1/blocks/latest')
+ http.get('http://54.67.3.130:1317/cosmos/base/tendermint/v1beta1/blocks/latest')
 }
 
 // const bombay_endpoints = [

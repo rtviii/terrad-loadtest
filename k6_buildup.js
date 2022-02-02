@@ -7,38 +7,46 @@ export const fail_counter = new Counter('FailedRequests')
 //-⋯⋯⋅⋱⋰⋆⋅⋅⋄⋅⋅∶⋅⋅⋄▫▪▭┈┅✕⋅⋅⋄⋅⋅✕∶⋅⋅⋄⋱⋰⋯⋯⋯⋯⋅⋱⋰⋆⋅⋅⋄⋅⋅∶⋅⋅⋄▫▪▭┈┅✕⋅⋅⋄⋅⋅✕∶⋅⋅⋄⋱⋰⋯⋯⋯⋅⋱⋰⋆⋅⋅⋄⋅⋅∶⋅⋅⋄▫▪▭┈┅✕⋅⋅⋄⋅⋅✕∶⋅⋅⋄⋱⋰⋯⋯⋯
 export const options = {
   stages: [
-    // { duration: '30s', target: 200 },
-    // { duration: '30s', target: 400 },
-    // { duration: '30s', target: 600 },
-    // { duration: '30s', target: 700 },
-    // { duration: '1m', target: 800 },
-    // { duration: '5s', target: 600 },
-    // { duration: '5s', target: 500 },
-    // { duration: '5s', target: 400 },
-    { duration: '5s', target: 300 },
+    { duration: '10s', target: 300 }, // |||
+    { duration: '10s', target: 400 }, // ||||
+    { duration: '10s', target: 400 }, // ||||
+    { duration: '10s', target: 400 }, // ||||
+    { duration: '10s', target: 400 }, // ||||
+    { duration: '10s', target: 600 }, // ||||||
+    { duration: '10s', target: 600 }, // ||||||
+    { duration: '10s', target: 600 }, // ||||||
+    { duration: '10s', target: 600 }, // ||||||
+    { duration: '10s', target: 700 }, // |||||||
+    { duration: '10s', target: 1000}, // |||||||||
+    { duration: '10s', target: 1000}, // |||||||||
+    { duration: '10s', target: 1000}, // |||||||||
+    { duration: '10s', target: 1000}, // |||||||||
+    { duration: '10s', target: 1000}, // |||||||||
+    { duration: '10s', target: 1000}, // |||||||||
+    { duration: '10s', target: 700 }, // ||||||
+    { duration: '10s', target: 600 }, // ||||||
+    { duration: '10s', target: 600 }, // ||||||
+    { duration: '10s', target: 500 }, // |||||
+    { duration: '10s', target: 400 }, // ||||
+    { duration: '10s', target: 500 }, // |||||
+    { duration: '10s', target: 500 }, // |||||
+    { duration: '10s', target: 500 }, // |||||
+    { duration: '10s', target: 500 }, // |||||
   ],
-  thresholds: {
-    "http_req_duration": [
-      {
-        threshold     : 'p(95) < 100',
-        abortOnFail   : false,
-        delayAbortEval: '2s',
-      },
-    ],
-  },
 };
 
 export default function () {
   http.get(
       bombay_endpoints[Math.floor(Math.random()*5)]['ep'])
 }
+const BOMBAY_NODE='54.67.3.130'
 
 const bombay_endpoints = [
-  {ep: 'http://127.0.0.1:1317/cosmos/base/tendermint/v1beta1/blocks/latest',},
-  {ep: 'http://127.0.0.1:1317/cosmos/base/tendermint/v1beta1/validatorsets/latest'},
-  {ep: 'http://127.0.0.1:1317/blocks/latest'},
-  {ep: 'http://127.0.0.1:1317/wasm/contracts/terra1p4gg3p2ue6qy2qfuxtrmgv2ec3f4jmgqtazum8/store?query_msg={"prices":{}}',},// Anchor Price Oracle
-  {ep: 'http://127.0.0.1:1317/wasm/contracts/terra18j0wd0f62afcugw2rx5y8e6j5qjxd7d6qsc87r/store?query_msg={"config":{}}',},// Anchor Liquidation Queue
+  {ep: `http://${BOMBAY_NODE}:1317/cosmos/base/tendermint/v1beta1/blocks/latest`,},
+  {ep: `http://${BOMBAY_NODE}:1317/cosmos/base/tendermint/v1beta1/validatorsets/latest`},
+  {ep: `http://${BOMBAY_NODE}:1317/blocks/latest`},
+  {ep: `http://${BOMBAY_NODE}:1317/wasm/contracts/terra1p4gg3p2ue6qy2qfuxtrmgv2ec3f4jmgqtazum8/store?query_msg={"prices":{}}`,},// Anchor Price Oracle
+  {ep: `http://${BOMBAY_NODE}:1317/wasm/contracts/terra18j0wd0f62afcugw2rx5y8e6j5qjxd7d6qsc87r/store?query_msg={"config":{}}`,},// Anchor Liquidation Queue
 
   // {ep: 'http://127.0.0.1:1317/wasm/contracts/terra19mkj9nec6e3y5754tlnuz4vem7lzh4n0lc2s3l/store', params: {query_msg: { "pool": {} }}},
   // {ep: 'http://127.0.0.1:1317/wasm/contracts/terra1seddp6u43xys0q85lpce9j6xwje7x7zqsf3fud/store', params: {query_msg: { "pool": {} }}},// bEth & bLuna
