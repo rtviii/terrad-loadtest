@@ -28,7 +28,11 @@ http_req_connecting 1643769199 0.000000
 
 argp =argparse.ArgumentParser()
 argp.add_argument("-f","--file",type=str)
-argp.add_argument("--Burst",action='store_true')
+
+argp.add_argument("--wasmonly",action='store_true')
+argp.add_argument("--nowasm",  action='store_true')
+
+argp.add_argument("--Bursts",action='store_true')
 argp.add_argument("--Buildup",action='store_true')
 argp.add_argument("--Saturation",action='store_true')
 args = argp.parse_args()
@@ -38,8 +42,8 @@ if args.Buildup:
     REGIME='Buildup'
 if args.Saturation:
     REGIME='Saturation'
-if args.Burst:
-    REGIME='Burst'
+if args.Bursts:
+    REGIME='Bursts'
 
 
 # logpath = sys.argv[1]
@@ -100,9 +104,38 @@ traffic = np.array([* map(lambda x: x['traffic'], report.values())])
 THRESHOLD_LATENCY_MS = 2000
 
 regimes = {
-    'Saturation': [ item for sublist in [[750]*60*5, [ 750 ]] for item in sublist],
-    'Burst'     : [ item for sublist in [[200]*13, [300]*10, [1500]*5, [750,750], [300]*30, [200]*60, [800]*2,[2000]*5,[1500]*5,[800]*2,[400]*10,[300]*80] for item in sublist],
-    'Buildup'   : [ item for sublist in [[300]*11, [400]*40, [600]*40, [700]*10,[1000]*60,[700]*10,[600]*20,[500]*10,[400]*10,[500]*41] for item in sublist]
+      'Saturation': [ item for sublist in [[800]*60*30,[800,800] ] for item in sublist],
+      'saturation_wasmonly'  : [ item for sublist in [[800]*60*30,[800,800] ] for item in sublist],
+
+      'Bursts'      : [ item for sublist in [
+          [400]*121, 
+          [200]*10, [800]*5, [1700]*5, [1500]*5,[800]*5, [400]*120,
+          [200]*10, [800]*5, [1500]*5, [1700]*5, [1500]*5, [800]*5, [400]*120,
+          [200]*10, [800]*5, [1700]*5, [1500]*5,[800]*5,[750]*5, [400]*120,
+          ] for item in sublist],
+      'bursts_wasmonly'    : [ item for sublist in [
+          [400]*120, 
+          [200]*10, [800]*5, [1700]*5, [1500]*5,[800]*5, [400]*120,
+          [200]*10, [800]*5, [1500]*5, [1700]*5, [1500]*5, [800]*5, [400]*120,
+          [200]*10, [800]*5, [1700]*5, [1500]*5,[800]*5,[750]*5, [400]*120,
+          ] for item in sublist],
+
+      'Buildup'     : [ item for sublist in [
+            [300]*62, [400]*60,[500]*60,[600]*60,[700]*60,[800]*60,[900]*60,[1000]*60,#...
+            [800]*10,[600]*10, [400]*10,
+            [300]*60, [400]*60,[500]*60,[600]*60,[700]*60,[800]*60,[900]*60,[1000]*60,#...
+            [800]*10,[600]*10, [400]*10,
+            [300]*60, [400]*60,[500]*60,[600]*60,[700]*60,[800]*60,[900]*60,[1000]*60,#...
+            [800]*10,[600]*10, [400]*10,
+          ] for item in sublist],
+      'buildup_wasmonly'   : [ item for sublist in [
+            [300]*60, [400]*60,[500]*60,[600]*60,[700]*60,[800]*60,[900]*60,[1000]*60,#...
+            [800]*10,[600]*10, [400]*10,
+            [300]*60, [400]*60,[500]*60,[600]*60,[700]*60,[800]*60,[900]*60,[1000]*60,#...
+            [800]*10,[600]*10, [400]*10,
+            [300]*60, [400]*60,[500]*60,[600]*60,[700]*60,[800]*60,[900]*60,[1000]*60,#...
+            [800]*10,[600]*10, [400]*10,
+          ] for item in sublist]
 }
 
 
@@ -112,7 +145,7 @@ regimes = {
 f, axarr = plt.subplots( nrows=2, ncols=1, figsize=(7, 7),
                        gridspec_kw={
                         #    'width_ratios': [3, 3],
-                           'height_ratios': [6, 2],
+                       'height_ratios': [6, 2],
                        'wspace': 0.1,
                        'hspace': 0.05},sharex=True)
 lat        = axarr
@@ -140,6 +173,14 @@ lat[0].tick_params(
     bottom      = False,  # ticks along the bottom edge are off
     top         = False,  # ticks along the top edge are off
     labelbottom = False) # labels along the bottom edge are o
+
+lat[0].tick_params(
+    size=12,
+    axis        = 'y',    # changes apply to the x-axis
+    which       = 'both', # both major and minor ticks are affected
+    bottom      = False,  # ticks along the bottom edge are off
+    top         = False,  # ticks along the top edge are off
+    labelbottom = False) # labels along the bottom edge are o
 lat[0].set_ylabel('Http Request Waittime ($\it{ms}$)', fontsize=16)
 # lat[0].set_title('Waiting time')
 
@@ -152,37 +193,23 @@ vus.plot(timestamps, regimes[REGIME], 'black',linewidth=0.5)
 vus.set_ylabel("Virtual Users",fontsize=16)
 vus.set_xlabel('Time Elapsed ($\it{s}$)',fontsize=16)
 
-# plt.title("Average Waiting time per second.")
+annotation = """ 
+[{} endpoints]
+AWS rx5large | 4 core/16GB
+Intel(R) Xeon(R) Platinum 8259CL CPU @ 2.50GHz
+""".format( "Only /wasm" if args.wasmonly else "Only non-/wasm")
+ 
+axarr[0].text(0.05, 0.90, annotation, transform=axarr[0].transAxes, fontsize=16,
+        verticalalignment='top')
 
 
-
-# lat.set_axisbelow(True)
-
-# # _twinx_n_reqs = lat.twinx()
-# # _twinx_n_reqs.plot(timestamps,n_reqs, color='blue', alpha=0.6, label="Number of requests")
-# # _twinx_n_reqs.set_ylabel("Requests/second", color="blue", size=14)
-# # _twinx_n_reqs.set_axisbelow(True)
-# # _twinx_n_reqs.grid(color='gray', linestyle='dashed')
-# # _twinx_n_reqs.tick_params(axis='y', colors='blue')
-
-# # traffic_in = axarr[1]
-# # traffic_in.plot(timestamps, traffic/1024, color='black', linewidth=0.5,alpha=0.9, label="Incoming traffic")
-# # traffic_in.set_title('Inbound Traffic')
-# # traffic_in.set_ylabel("kB")
-# # traffic_in.set_xlabel("Time (s)")
-
-# lat.locator_params(axis='x', nbins=10)
-# # traffic_in.locator_params(axis='x', nbins=10)
-
-# # loc = plticker.MultipleLocator(base=1.0) # this locator puts ticks at regular intervals
-# # axarr.xaxis.set_major_locator(loc)
-
-axarr[0].set_title(f"{REGIME} Regime",fontsize=20)
+axarr[0].set_title(f"{REGIME}",fontsize=20)
 legendPatches = []
 legendPatches.append(Patch(facecolor='royalblue', label= "Min/Max Spread"))
 legendPatches.append(Patch(facecolor='blue', label= "Mean Wait-time"))
 # handles, _ = axarr[0].get_legend_handles_labels()
 axarr[0].legend(handles=[*legendPatches], loc='best', fontsize=14)
+axarr[0].tick_params(labelsize=14)
 axarr[1].tick_params(labelsize=14)
 
 axarr[0].grid(alpha=0.3)

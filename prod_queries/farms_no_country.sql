@@ -1,0 +1,1 @@
+select grid_points from "farm";
